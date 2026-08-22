@@ -2,9 +2,55 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FAÇO SITES.</title>
-  <meta name="description" content="Criação de sites profissionais e arquitetura de informação." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  
+  <!-- SEO TÉCNICO & PALAVRAS-CHAVE TOP OF MIND -->
+  <title>FAÇO SITES. | Criação de Sites, Desenvolvimento Web & Landing Pages</title>
+  <meta name="description" content="Desenvolvimento de sites profissionais, landing pages de alta conversão, arquitetura de informação e soluções web sob medida." />
+  <meta name="keywords" content="faço sites, criação de sites, desenvolvimento web, web design, criar site profissional, landing page, SEO técnico, desenvolvedor de sites, criar landing page" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://facosites.com.br" />
+
+  <!-- PWA MANIFEST -->
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#141414" />
+
+  <!-- FAVICON & ÍCONES -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/imagens/logopreto.png" media="(prefers-color-scheme: light)" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/imagens/logobranco.png" media="(prefers-color-scheme: dark)" />
+  <link rel="apple-touch-icon" href="/imagens/pretoebranco.png" />
+
+  <!-- OPEN GRAPH / SOCIAL MEDIA (WHATSAPP, LINKEDIN, FACEBOOK) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="FAÇO SITES. — Desenvolvimento Web & Landing Pages" />
+  <meta property="og:description" content="Não tenho portfólio. Estou ocupado fazendo sites." />
+  <meta property="og:image" content="/imagens/pretoebranco.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- TWITTER CARDS -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="FAÇO SITES." />
+  <meta name="twitter:description" content="Criação de sites profissionais e arquitetura de informação." />
+  <meta name="twitter:image" content="/imagens/pretoebranco.png" />
+
+  <!-- SEO SEMÂNTICO (SCHEMA.ORG / JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "FAÇO SITES.",
+    "description": "Criação de sites profissionais, landing pages e arquitetura de informação.",
+    "image": "/imagens/pretoebranco.png",
+    "serviceType": [
+      "Criação de Sites",
+      "Desenvolvimento Web",
+      "Web Design",
+      "Landing Pages",
+      "Arquitetura de Informação"
+    ]
+  }
+  </script>
 
   <style>
     * {
@@ -21,6 +67,7 @@
       --modal-bg: #1a1a1a;
       --border-color: rgba(229, 224, 216, 0.15);
       --green-status: #34c759;
+      --logo-url: url('/imagens/logobranco.png');
     }
 
     @media (prefers-color-scheme: light) {
@@ -32,6 +79,7 @@
         --modal-bg: #ffffff;
         --border-color: rgba(26, 26, 26, 0.15);
         --green-status: #28a745;
+        --logo-url: url('/imagens/logopreto.png');
       }
     }
 
@@ -43,6 +91,8 @@
       color: var(--text);
       font-family: "Times New Roman", Times, Georgia, serif;
       -webkit-font-smoothing: antialiased;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     main {
@@ -66,15 +116,18 @@
       width: 100%;
     }
 
+    /* CONTÊINER TRAVADO EM LARGURA MÁXIMA DO CONTEÚDO */
     .hero-header {
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: fit-content;
+      width: max-content;
+      max-width: 100%;
+      margin: 0 auto;
     }
 
     .title {
-      font-size: clamp(2.5rem, 7.5vw, 6rem);
+      font-size: clamp(1.8rem, 7.5vw, 6rem);
       font-weight: 700;
       letter-spacing: -0.02em;
       line-height: 1;
@@ -82,6 +135,7 @@
       text-transform: uppercase;
       white-space: nowrap;
       width: 100%;
+      text-align: center;
     }
 
     .i-custom {
@@ -102,8 +156,9 @@
       border-radius: 50%;
     }
 
+    /* TRAVA DE PROPORÇÃO 82.5% EM QUALQUER TELA (DESKTOP E MOBILE PORTRAIT) */
     .subtitle {
-      font-size: clamp(0.7rem, 1.25vw, 1.05rem);
+      font-size: clamp(0.42rem, 1.22vw, 1.05rem);
       font-style: italic;
       font-weight: 400;
       line-height: 1;
@@ -113,6 +168,7 @@
       white-space: nowrap;
       width: 82.5%;
       margin: 0 auto;
+      display: block;
     }
 
     .proof {
@@ -135,7 +191,6 @@
       white-space: nowrap;
     }
 
-    /* REMOÇÃO DAS LINHAS PESADAS E APURAÇÃO VISUAL */
     a, .preview-trigger, .drawer-trigger {
       color: var(--text);
       text-decoration: none;
@@ -148,9 +203,9 @@
       display: inline-flex;
       align-items: center;
       gap: 0.25rem;
+      touch-action: manipulation;
     }
 
-    /* Sublinhado discreto surge apenas no interagir */
     a:hover, .preview-trigger:hover, .drawer-trigger:hover {
       opacity: 0.75;
       text-decoration: underline;
@@ -158,7 +213,6 @@
       text-underline-offset: 4px;
     }
 
-    /* Seta no mesmo tom de cor do texto (Monocromática) */
     .arrow-red {
       color: var(--text);
       font-style: normal;
@@ -267,7 +321,7 @@
       border: none;
     }
 
-    /* BARRA INFERIOR - BANHO TECNOLÓGICO */
+    /* BARRA INFERIOR */
     .window-footer {
       min-height: 40px;
       border-top: 1px solid var(--border-color);
@@ -280,13 +334,13 @@
       opacity: 0.95;
       background: rgba(0, 0, 0, 0.4);
       gap: 0.5rem;
-      flex-wrap: wrap;
     }
 
-    .telemetry-group {
+    .status-group {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.5rem;
+      letter-spacing: 0.05em;
     }
 
     .pulse-dot {
@@ -304,7 +358,7 @@
       100% { opacity: 0.4; }
     }
 
-    /* OVERLAY NO OVERLAY - DRAWER ENGENHARIA B2B */
+    /* DRAWER ENGENHARIA B2B */
     .bottom-sheet-overlay {
       position: fixed;
       inset: 0;
@@ -386,8 +440,15 @@
       margin-top: 2rem;
       padding-top: 1.2rem;
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
       align-items: center;
+    }
+
+    .brand-logo-img {
+      height: 24px;
+      width: auto;
+      content: var(--logo-url);
+      display: block;
     }
 
     .brand-logo-link {
@@ -407,19 +468,22 @@
     }
 
     @media (max-width: 640px) {
-      .subtitle {
-        letter-spacing: 0.08em;
-        width: 90%;
+      .hero-card {
+        padding: 0 0.5rem;
       }
 
       .proof {
-        margin-top: 3rem;
-        margin-bottom: 3rem;
+        margin-top: 3.5rem;
+        margin-bottom: 3.5rem;
+      }
+
+      .tech-overlay {
+        padding: 0.8rem;
       }
 
       .window-container {
-        width: 95vw;
-        height: 90vh;
+        width: 100%;
+        height: 88vh;
       }
 
       .window-footer {
@@ -427,14 +491,12 @@
       }
 
       .drawer {
-        padding: 1.2rem;
+        padding: 1.4rem;
       }
     }
   </style>
 </head>
 <body>
-
-  <audio id="bladeAudio" preload="auto" src="katana-draw.mp3"></audio>
 
   <!-- HOME PURISTA -->
   <main>
@@ -460,7 +522,7 @@
 
       <div class="cta">
         <p>Quer um?</p>
-        <a href="https://wa.me/5511999999999" class="cta-link">
+        <a href="https://wa.me/5511999999999" class="cta-link" target="_blank" rel="noopener">
           FALE COMIGO <span class="arrow-red">→</span>
         </a>
       </div>
@@ -479,24 +541,17 @@
         <iframe id="previewIframe" class="window-iframe" src=""></iframe>
       </div>
       
-      <!-- BANHO TECNOLÓGICO NA BARRA DO OVERLAY -->
       <div class="window-footer">
-        <div class="telemetry-group">
+        <div class="status-group">
           <span class="pulse-dot"></span>
-          <span id="overlayLocationBadge">--</span>
+          <span>SISTEMA ONLINE // PRONTO</span>
         </div>
-        <div class="telemetry-group">
-          <span>LATÊNCIA: <span id="pingVal">--</span>ms</span>
-          <span>//</span>
-          <span>RENDER: <span id="renderVal">--</span>ms</span>
-          <span>//</span>
-          <button class="drawer-trigger" id="openDrawer">Saber mais [+]</button>
-        </div>
+        <button class="drawer-trigger" id="openDrawer">Saber mais [+]</button>
       </div>
     </div>
   </div>
 
-  <!-- OVERLAY NO OVERLAY (ARQUITETURA & TECNOLOGIA B2B) -->
+  <!-- OVERLAY NO OVERLAY (ESPECIFICAÇÕES) -->
   <div class="bottom-sheet-overlay" id="drawerOverlay">
     <div class="drawer">
       <div class="drawer-header">
@@ -525,6 +580,7 @@
       </div>
 
       <div class="drawer-footer-brand">
+        <span class="brand-logo-img" aria-label="Logo FAÇO SITES"></span>
         <a href="https://wa.me/5511999999999" class="brand-logo-link" target="_blank" rel="noopener">
           FAÇO S<span class="i-custom">ı</span>TES. <span class="arrow-red">→</span>
         </a>
@@ -533,39 +589,73 @@
   </div>
 
   <script>
+    // WEB AUDIO API - ENGINE DE ÁUDIO ZERO LATÊNCIA
+    let audioCtx = null;
+    let audioBuffer = null;
+
+    async function initAudioEngine() {
+      try {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return;
+        audioCtx = new AudioContextClass();
+        const response = await fetch('katana-draw.mp3');
+        const arrayBuffer = await response.arrayBuffer();
+        audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+      } catch (e) {
+        console.log('Audio prebuffer engine ready with fallback.');
+      }
+    }
+
+    // Pré-carrega o áudio na memória RAM assim que a página abre
+    window.addEventListener('DOMContentLoaded', initAudioEngine);
+
+    // Dispara instantaneamente no momento em que o dedo encosta
+    function playInstantSound() {
+      if (audioCtx && audioBuffer) {
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        const source = audioCtx.createBufferSource();
+        source.buffer = audioBuffer;
+        const gainNode = audioCtx.createGain();
+        gainNode.gain.value = 0.7;
+        source.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        source.start(0);
+      } else {
+        const fallback = new Audio('katana-draw.mp3');
+        fallback.volume = 0.7;
+        fallback.play().catch(() => {});
+      }
+    }
+
+    // ELEMENTOS DO DOM
     const overlay = document.getElementById('techOverlay');
     const iframe = document.getElementById('previewIframe');
     const title = document.getElementById('overlayTitle');
     const closeBtn = document.getElementById('closeOverlay');
     const triggers = document.querySelectorAll('.preview-trigger');
-    const bladeAudio = document.getElementById('bladeAudio');
 
     const drawerOverlay = document.getElementById('drawerOverlay');
     const openDrawerBtn = document.getElementById('openDrawer');
     const closeDrawerBtn = document.getElementById('closeDrawer');
 
-    if (bladeAudio) {
-      bladeAudio.volume = 0.7;
-    }
-
-    function triggerAudio() {
-      if (bladeAudio) {
-        bladeAudio.currentTime = 0;
-        bladeAudio.play().catch(() => {});
-      }
-    }
-
+    // DISPARO NO TOUCH / PRESSIONAR (ON DOWN, ZERO LAG)
     triggers.forEach(trigger => {
-      trigger.addEventListener('click', () => {
-        triggerAudio();
+      trigger.addEventListener('pointerdown', (e) => {
+        playInstantSound();
         const url = trigger.getAttribute('data-url');
         const siteTitle = trigger.getAttribute('data-title');
         
         iframe.src = url;
         title.textContent = siteTitle;
         overlay.classList.add('active');
-        fetchTelemetryData();
       });
+    });
+
+    openDrawerBtn.addEventListener('pointerdown', () => {
+      playInstantSound();
+      drawerOverlay.classList.add('active');
     });
 
     function closeWindow() {
@@ -578,11 +668,6 @@
     closeBtn.addEventListener('click', closeWindow);
     overlay.addEventListener('click', (e) => {
       if (e.target === overlay) closeWindow();
-    });
-
-    openDrawerBtn.addEventListener('click', () => {
-      triggerAudio();
-      drawerOverlay.classList.add('active');
     });
 
     function closeDrawer() {
@@ -603,36 +688,6 @@
         }
       }
     });
-
-    // TELEMETRIA DIRETA SEM FALLBACKS DE TEXTO
-    function fetchTelemetryData() {
-      const renderTime = performance.now().toFixed(1);
-      document.getElementById('renderVal').textContent = renderTime;
-
-      const startTime = performance.now();
-      
-      fetch(window.location.href, { method: 'HEAD', cache: 'no-store' })
-        .then(() => {
-          const ping = Math.round(performance.now() - startTime);
-          document.getElementById('pingVal').textContent = ping;
-        })
-        .catch(() => {
-          document.getElementById('pingVal').textContent = '--';
-        });
-
-      fetch('https://ipapi.co/json/')
-        .then(res => res.json())
-        .then(data => {
-          if (data.city) {
-            document.getElementById('overlayLocationBadge').textContent = `CONECTADO DE ${data.city.toUpperCase()}, ${data.region_code || ''}`;
-          } else {
-            document.getElementById('overlayLocationBadge').textContent = '--';
-          }
-        })
-        .catch(() => {
-          document.getElementById('overlayLocationBadge').textContent = '--';
-        });
-    }
   </script>
 
 </body>
