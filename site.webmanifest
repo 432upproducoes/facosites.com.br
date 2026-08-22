@@ -1,0 +1,21 @@
+{
+  "name": "FAÇO SITES.",
+  "short_name": "FAÇO SITES.",
+  "description": "Desenvolvimento de sites profissionais, landing pages e arquitetura de informação.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#141414",
+  "theme_color": "#141414",
+  "icons": [
+    {
+      "src": "/imagens/pretoebranco.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/imagens/pretoebranco.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
