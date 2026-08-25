@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu 8-bit</title>
+    <!-- Importando a fonte estilo pixel art do Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            background-color: #000000; /* Fundo preto clássico de console */
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Press Start 2P', monospace; /* Fonte 8-bit */
+        }
+
+        .retro-container {
+            text-align: center;
+        }
+
+        /* Estilo do link como texto 8-bit */
+        .retro-link {
+            color: #ffff00; /* Amarelo clássico de menu */
+            text-decoration: none;
+            font-size: 16px;
+            display: inline-block;
+            padding: 10px;
+            transition: 0.1s;
+        }
+
+        /* Efeito de seleção/hover estilo videogame (pisca ou inverte) */
+        .retro-link:hover {
+            color: #00ffff; /* Ciano retrô */
+            background-color: #ffffff;
+            color: #000000; /* Inverte as cores ao passar o mouse */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="retro-container">
+        <a href="index.html" class="retro-link">&gt; START GAME</a>
+    </div>
+
+</body>
+</html>
