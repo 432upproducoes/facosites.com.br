@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monte seu Pedido — Faço Pedidos · Mercadinho</title>
+<link rel="icon" type="image/png" href="img/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --roxo:#166534;--roxo2:#15803D;--roxo3:#22C55E;
+  --amarelo:#EAB308;--amarelo2:#FACC15;
+  --rosa:#F97316;--rosa2:#FDBA74;
+  --azul:#0EA5E9;--verde:#16A34A;
+  --text:#1E293B;--off:#F0FDF4;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Nunito',sans-serif;color:var(--text);min-height:100vh;
+  background:repeating-linear-gradient(90deg,
+    #F0FDF4 0px,#F0FDF4 32px,#FEF9C3 32px,#FEF9C3 64px,
+    #DCFCE7 64px,#DCFCE7 96px,#FFEDD5 96px,#FFEDD5 128px,
+    #E0F2FE 128px,#E0F2FE 160px,#FCE7F3 160px,#FCE7F3 192px);
+}
+
+/* ══ HERO ══ */
+#hero{
+  background:linear-gradient(175deg,rgba(22,101,52,.97) 0%,rgba(21,128,61,.95) 55%,rgba(34,197,94,.92) 100%);
+  padding:44px 20px 72px;text-align:center;position:relative;overflow:hidden;
+}
+#hero::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(90deg,
+    rgba(240,253,244,.14) 0 28px,rgba(254,249,195,.12) 28px 56px,
+    rgba(220,252,231,.12) 56px 84px,rgba(255,237,213,.10) 84px 112px,
+    rgba(224,242,254,.10) 112px 140px,rgba(252,231,243,.08) 140px 168px);
+}
+.hero-logo{
+  width:140px;height:140px;border-radius:50%;
+  border:5px solid var(--amarelo);
+  box-shadow:0 0 0 8px rgba(234,179,8,.3),0 16px 48px rgba(0,0,0,.35);
+  display:block;margin:0 auto 16px;object-fit:contain;background:white;
+  animation:float 3s ease-in-out infinite;position:relative;z-index:2;
+}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.hero-title{
+  font-family:'Fredoka One',cursive;font-size:clamp(2rem,7vw,3.2rem);color:white;
+  text-shadow:3px 4px 0 var(--amarelo),6px 7px 0 rgba(0,0,0,.3);
+  line-height:1;position:relative;z-index:2;
+}
+.hero-sub{
+  font-family:'Fredoka One',cursive;font-size:.9rem;color:var(--amarelo);
+  letter-spacing:3px;text-transform:uppercase;margin:6px 0 16px;position:relative;z-index:2;
+}
+.hero-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.16);border:2px solid rgba(255,255,255,.3);
+  backdrop-filter:blur(6px);border-radius:50px;padding:10px 22px;
+  color:white;font-weight:800;font-size:.92rem;position:relative;z-index:2;
+}
+.hero-wave{position:absolute;bottom:-2px;left:0;width:100%;z-index:3;}
+
+/* ══ STATUS BAR ══ */
+#status-bar{padding:10px 20px;text-align:center;font-weight:800;font-size:.88rem;}
+#status-bar.aberto{background:linear-gradient(90deg,#166534,#22C55E);color:white;}
+#status-bar.fechado{background:linear-gradient(90deg,#7A1A1A,#C0392B);color:white;}
+#status-bar span{opacity:.8;font-size:.78rem;margin-left:8px;}
+
+/* ══ BOAS VINDAS ══ */
+#boas-vindas{
+  display:none;
+  background:linear-gradient(135deg,rgba(22,101,52,.97),rgba(21,128,61,.97));
+  border-bottom:4px solid var(--amarelo);padding:20px;text-align:center;
+}
+.bv-texto{font-family:'Fredoka One',cursive;font-size:1.3rem;color:white;margin-bottom:4px;}
+.bv-frase{color:var(--amarelo);font-size:.9rem;font-weight:700;margin-bottom:14px;}
+.bv-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.bv-btn{border:none;border-radius:14px;padding:10px 20px;font-family:'Fredoka One',cursive;font-size:.95rem;cursor:pointer;transition:all .15s;}
+.bv-sim{background:var(--amarelo);color:var(--roxo);box-shadow:0 4px 0 #CA8A04;}
+.bv-nao{background:rgba(255,255,255,.15);color:white;border:2px solid rgba(255,255,255,.3);}
+.bv-rep{background:linear-gradient(135deg,#15803D,#166534);color:white;box-shadow:0 4px 0 #14532D;display:none;}
+.bv-btn:hover{transform:translateY(-1px);}
+
+/* ══ FECHADO ══ */
+#fechado-banner{
+  display:none;margin:12px;
+  background:linear-gradient(135deg,#7A1A1A,#C0392B);
+  border-radius:20px;padding:20px;text-align:center;border:3px solid #FF6B6B;
+}
+.fb-title{font-family:'Fredoka One',cursive;font-size:1.3rem;color:white;margin-bottom:6px;}
+.fb-sub{color:rgba(255,255,255,.8);font-size:.86rem;margin-bottom:14px;}
+.fb-btn{background:var(--amarelo);color:var(--roxo);border:none;border-radius:14px;padding:12px 24px;font-family:'Fredoka One',cursive;font-size:.95rem;cursor:pointer;box-shadow:0 4px 0 #CA8A04;transition:all .15s;}
+.fb-btn:hover{transform:translateY(-1px);}
+
+/* ══ PROGRESS BAR ══ */
+#progress-wrap{
+  background:rgba(22,101,52,.96);backdrop-filter:blur(4px);
+  padding:14px 16px 10px;position:sticky;top:0;z-index:50;
+  border-bottom:3px solid var(--amarelo);
+}
+.progress-steps{display:flex;align-items:center;justify-content:center;max-width:540px;margin:0 auto;}
+.ps{display:flex;flex-direction:column;align-items:center;position:relative;flex:1;cursor:pointer;}
+.ps-dot{
+  width:28px;height:28px;border-radius:50%;
+  background:rgba(255,255,255,.2);border:2.5px solid rgba(255,255,255,.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.68rem;font-weight:900;color:rgba(255,255,255,.5);transition:all .3s;z-index:2;
+}
+.ps:hover .ps-dot{background:rgba(255,255,255,.35);}
+.ps.done .ps-dot{background:var(--verde);border-color:var(--verde);color:#14532D;}
+.ps.active .ps-dot{background:var(--amarelo);border-color:var(--amarelo);color:var(--roxo);box-shadow:0 0 12px rgba(234,179,8,.55);}
+.ps-line{flex:1;height:3px;background:rgba(255,255,255,.2);margin:0 -1px;margin-top:-14px;position:relative;z-index:1;transition:background .3s;}
+.ps-line.done{background:var(--verde);}
+.ps-lbl{font-size:.52rem;color:rgba(255,255,255,.5);margin-top:4px;font-weight:700;text-align:center;white-space:nowrap;}
+.ps.active .ps-lbl{color:var(--amarelo);}
+.ps.done .ps-lbl{color:var(--verde);}
+
+/* ══ MAIN ══ */
+main{max-width:700px;margin:0 auto;padding:20px 14px 180px;}
+
+/* ══ STEP CARD ══ */
+.step-card{
+  background:rgba(255,255,255,.96);backdrop-filter:blur(8px);
+  border-radius:22px;margin-bottom:18px;overflow:hidden;
+  box-shadow:0 4px 0 rgba(22,101,52,.12),0 8px 28px rgba(0,0,0,.07);
+  border:2.5px solid rgba(255,255,255,.9);transition:border-color .3s,box-shadow .3s;
+}
+.step-card.done{border-color:var(--verde);}
+.step-card.active{border-color:var(--roxo);}
+.step-card.has-error{border-color:#e74c3c!important;box-shadow:0 4px 0 rgba(231,76,60,.3),0 8px 28px rgba(231,76,60,.15)!important;animation:shake .4s ease;}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.step-header{display:flex;align-items:center;gap:14px;padding:15px 18px;cursor:pointer;user-select:none;}
+.step-num{
+  width:42px;height:42px;border-radius:50%;
+  background:linear-gradient(135deg,var(--roxo),var(--roxo3));
+  color:white;font-family:'Fredoka One',cursive;font-size:1.3rem;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;box-shadow:3px 3px 0 var(--amarelo);transition:all .3s;
+}
+.step-card.done .step-num{background:linear-gradient(135deg,#15803D,var(--verde));}
+.step-card.has-error .step-num{background:linear-gradient(135deg,#c0392b,#e74c3c);box-shadow:3px 3px 0 #ffaaaa;}
+.step-title{font-family:'Fredoka One',cursive;font-size:1.15rem;color:var(--roxo);flex:1;}
+.step-badge{background:var(--amarelo);color:var(--roxo);font-weight:900;font-size:.72rem;padding:5px 11px;border-radius:20px;white-space:nowrap;}
+.step-card.done .step-badge{background:var(--verde);color:#14532D;}
+.step-card.has-error .step-badge{background:#e74c3c;color:white;}
+.step-body{padding:0 18px 20px;display:none;}
+.step-body.open{display:block;}
+
+/* ══ CAMPOS ══ */
+.field-label{font-weight:800;color:var(--roxo);font-size:.86rem;margin-bottom:5px;display:block;}
+.field-input{
+  width:100%;border:2.5px solid #BBF7D0;border-radius:14px;
+  padding:11px 15px;font-family:'Nunito',sans-serif;font-size:.93rem;
+  font-weight:700;color:var(--text);outline:none;transition:border-color .2s;background:white;
+}
+.field-input:focus{border-color:var(--roxo);}
+.field-input.input-ok{border-color:var(--verde);}
+.field-input.input-err{border-color:#e74c3c;}
+.error-msg{color:#e74c3c;font-size:.78rem;font-weight:800;margin-top:5px;display:none;}
+.error-msg.show{display:block;}
+
+/* ══ CATEGORIA / CORREDORES ══ */
+.cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:4px;}
+@media(min-width:480px){.cat-grid{grid-template-columns:repeat(3,1fr);}}
+.cat-card{
+  border:3px solid #BBF7D0;border-radius:18px;padding:14px 8px 12px;
+  cursor:pointer;text-align:center;transition:all .2s;background:white;position:relative;
+}
+.cat-card:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(22,101,52,.12);}
+.cat-card.selected{border-color:var(--roxo);background:linear-gradient(160deg,#F0FDF4,#DCFCE7);}
+.cat-card.selected::after{content:'✓';position:absolute;top:7px;right:10px;color:var(--roxo);font-weight:900;}
+.cat-emoji{font-size:2.2rem;display:block;margin-bottom:5px;}
+.cat-nome{font-family:'Fredoka One',cursive;font-size:.95rem;color:var(--roxo);}
+.cat-sub{font-size:.68rem;color:#888;margin-top:2px;}
+
+/* ══ PRODUTO COM QTY INLINE ══ */
+.prod-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-top:6px;}
+@media(min-width:420px){.prod-grid{grid-template-columns:repeat(2,1fr);}}
+.prod-item{
+  border:2.5px solid #BBF7D0;border-radius:16px;padding:14px;
+  background:white;transition:all .2s;position:relative;
+  display:flex;flex-direction:column;gap:6px;
+}
+.prod-item:hover{background:#F0FDF4;}
+.prod-item.selected{border-color:var(--roxo);background:#DCFCE7;box-shadow:0 0 0 2px rgba(22,101,52,.15);}
+.prod-nome{font-family:'Fredoka One',cursive;font-size:.95rem;color:var(--roxo);}
+.prod-desc{font-size:.72rem;color:#666;}
+.prod-preco{font-family:'Fredoka One',cursive;font-size:1.05rem;color:#15803D;}
+.prod-unidade{font-size:.7rem;color:#888;font-weight:700;}
+
+.prod-qty-row{
+  display:none;align-items:center;justify-content:center;gap:12px;margin-top:8px;
+  background:rgba(22,101,52,.08);border-radius:30px;padding:6px 10px;
+}
+.prod-item.selected .prod-qty-row{display:flex;}
+.prod-qbtn{
+  width:34px;height:34px;border-radius:50%;border:none;
+  background:linear-gradient(135deg,var(--roxo),var(--roxo3));
+  color:white;font-size:1.2rem;font-family:'Fredoka One',cursive;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  box-shadow:2px 2px 0 var(--amarelo);
+}
+.prod-qbtn:active{transform:scale(.92);}
+.prod-qnum{font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--roxo);min-width:28px;text-align:center;}
+
+/* ══ QTY GERAL (mantido) ══ */
+.qty-row{display:flex;align-items:center;gap:16px;margin-top:10px;}
+.qty-btn{
+  width:46px;height:46px;border-radius:50%;border:none;
+  background:linear-gradient(135deg,var(--roxo),var(--roxo3));
+  color:white;font-size:1.5rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:3px 3px 0 var(--amarelo);transition:transform .1s;
+  font-family:'Fredoka One',cursive;
+}
+.qty-btn:active{transform:scale(.9);}
+.qty-num{font-family:'Fredoka One',cursive;font-size:2.2rem;color:var(--roxo);min-width:44px;text-align:center;}
+
+/* ══ BLOCO ADD (escondido na maioria dos casos) ══ */
+#bloco-add{display:none;}
+
+/* ══ CUPOM ══ */
+.cupom-row{display:flex;gap:9px;margin-top:8px;}
+.cupom-row .field-input{flex:1;}
+.btn-cupom{background:var(--roxo2);color:white;border:none;border-radius:13px;padding:11px 16px;font-family:'Fredoka One',cursive;font-size:.9rem;cursor:pointer;transition:all .15s;box-shadow:0 3px 0 #14532D;}
+.cupom-ok{display:none;background:#DCFCE7;border:2px solid var(--verde);border-radius:11px;padding:8px 13px;font-size:.82rem;font-weight:800;color:#14532D;margin-top:7px;}
+.cupom-err{display:none;background:#FEE2E2;border:2px solid #EF4444;border-radius:11px;padding:8px 13px;font-size:.82rem;font-weight:800;color:#991B1B;margin-top:7px;}
+
+/* ══ ENTREGA ══ */
+.entrega-row{display:flex;gap:10px;margin-top:8px;}
+.ent-btn{flex:1;border:3px solid #BBF7D0;border-radius:15px;padding:15px 8px;cursor:pointer;text-align:center;background:white;transition:all .2s;}
+.ent-btn:hover{transform:translateY(-2px);}
+.ent-btn.selected{border-color:var(--roxo);background:#DCFCE7;}
+.ent-emoji{font-size:1.9rem;display:block;margin-bottom:5px;}
+.ent-lbl{font-family:'Fredoka One',cursive;font-size:.95rem;color:var(--roxo);}
+.ent-sub{font-size:.72rem;color:#888;margin-top:2px;}
+
+/* ══ BAIRROS ══ */
+.bairro-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:8px;}
+@media(min-width:480px){.bairro-grid{grid-template-columns:repeat(3,1fr);}}
+.bairro-btn{border:3px solid #BBF7D0;border-radius:15px;padding:13px 8px;cursor:pointer;background:white;text-align:center;transition:all .2s;position:relative;}
+.bairro-btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(22,101,52,.1);}
+.bairro-btn.selected{border-color:var(--roxo);background:#DCFCE7;}
+.bairro-btn.selected::after{content:'✓';position:absolute;top:7px;right:9px;color:var(--roxo);font-weight:900;}
+.bairro-nome{font-family:'Fredoka One',cursive;font-size:.9rem;color:var(--roxo);}
+.bairro-taxa{font-family:'Fredoka One',cursive;font-size:1rem;color:#15803D;}
+
+/* ══ OUTRO BAIRRO / CEP ══ */
+.outro-wrap{margin-top:14px;border:2.5px dashed #86EFAC;border-radius:16px;padding:14px;background:rgba(240,253,244,.6);}
+.outro-title{font-family:'Fredoka One',cursive;font-size:.92rem;color:var(--roxo3);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.cep-btn-row{display:flex;gap:8px;align-items:flex-end;}
+.cep-btn-row .field-input{flex:1;}
+.btn-buscar{background:var(--roxo);color:white;border:none;border-radius:13px;padding:11px 14px;font-family:'Fredoka One',cursive;font-size:.88rem;cursor:pointer;white-space:nowrap;transition:all .15s;box-shadow:0 3px 0 #14532D;}
+.btn-buscar:hover{transform:translateY(-1px);}
+.taxa-resultado{display:none;margin-top:10px;background:linear-gradient(90deg,#DCFCE7,#F0FDF4);border:2px solid var(--roxo3);border-radius:12px;padding:10px 14px;font-size:.85rem;font-weight:800;color:var(--roxo);}
+.taxa-resultado .dist-detalhe{font-size:.75rem;color:var(--roxo3);margin-top:2px;}
+
+/* ══ ENDEREÇO ══ */
+.end-wrap{margin-top:14px;}
+.cep-ok-msg{display:none;color:#15803D;font-size:.78rem;font-weight:800;margin-top:5px;margin-bottom:8px;}
+.rua-num{display:grid;grid-template-columns:1fr 80px;gap:9px;margin-bottom:9px;}
+.addr-2col{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+@media(max-width:460px){.rua-num,.addr-2col{grid-template-columns:1fr;}}
+.addr-full{grid-column:1/-1;}
+.minimo-warn{display:none;background:#FEF9C3;border:2px solid var(--amarelo2);border-radius:11px;padding:9px 13px;font-size:.82rem;font-weight:800;color:#854D0E;margin-top:9px;}
+.minimo-warn.show{display:block;}
+
+/* ══ HORÁRIO ══ */
+.horario-bloco{margin-top:16px;border-top:2px dashed #BBF7D0;padding-top:14px;}
+.horario-info{background:rgba(234,179,8,.12);border-left:4px solid var(--amarelo);border-radius:0 11px 11px 0;padding:9px 13px;font-size:.8rem;font-weight:700;color:#854D0E;margin-bottom:12px;}
+
+/* ══ RESUMO ══ */
+#resumo{
+  background:linear-gradient(145deg,rgba(20,83,45,.97),rgba(22,101,52,.97),rgba(21,128,61,.95));
+  backdrop-filter:blur(8px);border-radius:22px;padding:22px 20px;margin-bottom:16px;
+  box-shadow:0 8px 0 rgba(0,0,0,.18),0 16px 40px rgba(22,101,52,.3);
+  border:3px solid rgba(234,179,8,.35);
+}
+.resumo-title{font-family:'Fredoka One',cursive;font-size:1.35rem;color:var(--amarelo);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.r-linha{display:flex;justify-content:space-between;align-items:flex-start;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.1);gap:14px;font-size:.86rem;}
+.r-linha:last-child{border-bottom:none;}
+.r-key{color:rgba(255,255,255,.62);flex-shrink:0;}
+.r-val{font-weight:800;color:white;text-align:right;}
+.r-desc{color:#86EFAC;}
+.r-sep{border-bottom:2px solid rgba(234,179,8,.3)!important;margin:4px 0;}
+.r-total{margin-top:16px;padding-top:12px;border-top:3px solid var(--amarelo);display:flex;justify-content:space-between;align-items:center;}
+.r-total-lbl{font-family:'Fredoka One',cursive;font-size:.95rem;color:rgba(255,255,255,.8);}
+.r-total-val{font-family:'Fredoka One',cursive;font-size:2.1rem;color:var(--amarelo);text-shadow:2px 2px 0 rgba(0,0,0,.3);}
+
+/* ══ BTN ZAP ══ */
+#btn-zap{
+  width:100%;background:linear-gradient(135deg,#25D366,#1DA851);
+  color:white;border:none;border-radius:19px;padding:18px;
+  font-family:'Fredoka One',cursive;font-size:1.4rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  box-shadow:0 6px 0 #1a9e45,0 10px 24px rgba(37,211,102,.4);
+  transition:all .15s;margin-bottom:9px;
+}
+#btn-zap:hover{transform:translateY(-2px);box-shadow:0 8px 0 #1a9e45,0 14px 28px rgba(37,211,102,.5);}
+#btn-zap:active{transform:translateY(2px);box-shadow:0 3px 0 #1a9e45;}
+
+/* ══ FLOAT BAR ══ */
+#float-bar{
+  position:fixed;bottom:0;left:0;right:0;
+  background:linear-gradient(90deg,rgba(20,83,45,.97),rgba(22,101,52,.97));
+  border-top:4px solid var(--amarelo);padding:10px 16px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  z-index:200;box-shadow:0 -4px 24px rgba(0,0,0,.3);
+}
+.fb-cart-btn{
+  position:relative;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.2);
+  border-radius:13px;padding:8px 12px;cursor:pointer;transition:all .2s;flex-shrink:0;
+  display:flex;align-items:center;gap:5px;
+}
+.fb-cart-btn:hover{background:rgba(255,255,255,.22);}
+.fb-cart-icon{font-size:1.3rem;line-height:1;}
+.fb-cart-badge{
+  position:absolute;top:-6px;right:-6px;
+  background:var(--rosa);color:white;border-radius:50%;
+  width:18px;height:18px;font-size:.62rem;font-weight:900;
+  display:none;align-items:center;justify-content:center;
+  border:2px solid rgba(20,83,45,.97);
+}
+.fb-cart-badge.show{display:flex;}
+.fb-total-wrap{display:flex;flex-direction:column;flex:1;min-width:0;}
+.fb-lbl{font-size:.62rem;color:rgba(255,255,255,.5);font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+.fb-total{font-family:'Fredoka One',cursive;font-size:1.55rem;color:var(--amarelo);text-shadow:2px 2px 0 rgba(0,0,0,.3);white-space:nowrap;}
+.fb-pedir{
+  background:var(--amarelo);color:var(--roxo);border:none;border-radius:13px;
+  padding:11px 18px;font-family:'Fredoka One',cursive;font-size:.95rem;
+  cursor:pointer;box-shadow:0 4px 0 #CA8A04;transition:all .15s;white-space:nowrap;flex-shrink:0;
+}
+.fb-pedir:hover{transform:translateY(-1px);}
+
+/* ══ DRAWER CARRINHO ══ */
+#cart-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;}
+#cart-overlay.open{display:block;}
+#cart-drawer{
+  position:fixed;bottom:0;left:0;right:0;z-index:301;
+  background:linear-gradient(175deg,rgba(20,83,45,.99),rgba(22,101,52,.99));
+  border-radius:24px 24px 0 0;border-top:4px solid var(--amarelo);
+  padding:0 0 20px;max-height:82vh;display:flex;flex-direction:column;
+  transform:translateY(100%);transition:transform .35s cubic-bezier(.32,.72,0,1);
+}
+#cart-drawer.open{transform:translateY(0);}
+.drawer-handle{width:40px;height:5px;background:rgba(255,255,255,.25);border-radius:3px;margin:12px auto 0;flex-shrink:0;cursor:pointer;}
+.drawer-header{display:flex;align-items:center;justify-content:space-between;padding:12px 20px 10px;flex-shrink:0;border-bottom:2px solid rgba(255,255,255,.1);}
+.drawer-title{font-family:'Fredoka One',cursive;font-size:1.15rem;color:var(--amarelo);}
+.drawer-close{background:rgba(255,255,255,.12);border:none;color:white;border-radius:10px;padding:6px 12px;font-size:.85rem;cursor:pointer;font-family:'Fredoka One',cursive;}
+.drawer-body{overflow-y:auto;flex:1;padding:12px 16px 0;}
+.drawer-body::-webkit-scrollbar{width:0;}
+.di-wrap{display:flex;flex-direction:column;gap:10px;}
+.di{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15);border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:10px;}
+.di-emoji{font-size:1.5rem;flex-shrink:0;}
+.di-info{flex:1;min-width:0;}
+.di-nome{font-family:'Fredoka One',cursive;font-size:.92rem;color:white;}
+.di-detalhe{font-size:.7rem;color:rgba(255,255,255,.55);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.di-preco{font-family:'Fredoka One',cursive;font-size:.95rem;color:var(--amarelo);flex-shrink:0;}
+.di-qty-row{display:flex;align-items:center;gap:0;background:rgba(255,255,255,.1);border-radius:22px;overflow:hidden;flex-shrink:0;}
+.di-qbtn{background:none;border:none;color:white;width:32px;height:32px;font-size:1.1rem;font-family:'Fredoka One',cursive;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;}
+.di-qbtn:hover{background:rgba(255,255,255,.15);}
+.di-qnum{font-family:'Fredoka One',cursive;font-size:.95rem;color:white;min-width:24px;text-align:center;}
+.di-del{background:rgba(231,76,60,.25);border:none;color:#ff9999;border-radius:9px;width:30px;height:30px;cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;}
+.di-del:hover{background:rgba(231,76,60,.5);color:white;}
+.drawer-empty{text-align:center;padding:32px 20px;color:rgba(255,255,255,.4);font-size:.9rem;font-weight:700;}
+.drawer-footer{padding:14px 16px 0;flex-shrink:0;border-top:2px solid rgba(255,255,255,.1);margin-top:10px;}
+.df-total{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.df-total-lbl{font-family:'Fredoka One',cursive;font-size:.9rem;color:rgba(255,255,255,.7);}
+.df-total-val{font-family:'Fredoka One',cursive;font-size:1.5rem;color:var(--amarelo);}
+.df-add-btn{width:100%;border:2.5px dashed rgba(255,255,255,.3);border-radius:14px;padding:12px;background:rgba(255,255,255,.07);font-family:'Fredoka One',cursive;font-size:.95rem;color:rgba(255,255,255,.7);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.df-add-btn:hover{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.5);}
+
+/* ══ MISC ══ */
+.sub-wrap{margin-top:14px;}
+.sub-lbl{font-family:'Fredoka One',cursive;font-size:.92rem;color:var(--roxo);margin-bottom:7px;}
+.info-banner{background:rgba(234,179,8,.12);border-left:4px solid var(--amarelo2);border-radius:0 11px 11px 0;padding:8px 12px;font-size:.79rem;font-weight:700;color:#854D0E;margin-bottom:10px;}
+
+/* ══ TOAST ══ */
+#toast{
+  position:fixed;bottom:90px;left:50%;transform:translateX(-50%);
+  background:rgba(22,101,52,.97);color:white;border-radius:12px;
+  padding:10px 22px;font-weight:800;font-size:.86rem;z-index:9990;
+  display:none;box-shadow:0 4px 16px rgba(22,101,52,.4);
+  white-space:nowrap;max-width:90vw;text-align:center;
+}
+
+/* ══ OBRIGADO ══ */
+#tela-obrigado{
+  display:none;position:fixed;inset:0;
+  background:linear-gradient(145deg,rgba(20,83,45,.98),rgba(22,101,52,.98));
+  z-index:9999;align-items:center;justify-content:center;flex-direction:column;
+  text-align:center;padding:32px;backdrop-filter:blur(8px);
+}
+.obg-emoji{font-size:5rem;animation:float 2s ease-in-out infinite;}
+.obg-title{font-family:'Fredoka One',cursive;font-size:2rem;color:var(--amarelo);text-shadow:3px 3px 0 rgba(0,0,0,.3);margin:16px 0 8px;}
+.obg-msg{color:rgba(255,255,255,.85);font-size:.98rem;font-weight:700;max-width:300px;margin:0 auto 24px;}
+.obg-btn{background:var(--amarelo);color:var(--roxo);border:none;border-radius:17px;padding:14px 30px;font-family:'Fredoka One',cursive;font-size:1.15rem;cursor:pointer;box-shadow:0 6px 0 #CA8A04;transition:all .15s;}
+.obg-btn:hover{transform:translateY(-2px);}
+
+.stripe-band{height:10px;background:repeating-linear-gradient(90deg,var(--roxo) 0 30px,var(--amarelo) 30px 60px,var(--rosa) 60px 90px,var(--azul) 90px 120px,var(--verde) 120px 150px);}
+footer{background:rgba(22,101,52,.96);text-align:center;padding:26px;color:rgba(255,255,255,.45);font-size:.78rem;}
+footer strong{color:var(--amarelo);}
+</style>
+</head>
+<body>
+
+<div class="stripe-band"></div>
+
+<section id="hero">
+  <img class="hero-logo" src="img/logo.png" alt="Faço Pedidos Mercadinho"
+    onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛒</text></svg>'">
+  <h1 class="hero-title">Monte seu Pedido</h1>
+  <p class="hero-sub">Faço Pedidos · Mercadinho de Bairro</p>
+  <div class="hero-pill">🛒 Clique e adicione direto no carrinho!</div>
+  <svg class="hero-wave" viewBox="0 0 1440 56" fill="none">
+    <path d="M0,28 C240,56 480,0 720,28 C960,56 1200,0 1440,28 L1440,56 L0,56 Z" fill="rgba(240,253,244,0.25)"/>
+  </svg>
+</section>
+
+<div id="status-bar"></div>
+
+<div id="boas-vindas">
+  <div class="bv-texto" id="bv-texto"></div>
+  <div class="bv-frase" id="bv-frase"></div>
+  <div class="bv-btns">
+    <button class="bv-btn bv-sim" onclick="confirmarId(true)">✅ Sim, sou eu!</button>
+    <button class="bv-btn bv-nao" onclick="confirmarId(false)">❌ Não sou eu</button>
+    <button class="bv-btn bv-rep" id="btn-repetir" onclick="repetirUltimo()">🔄 Repetir último pedido</button>
+  </div>
+</div>
+
+<div id="fechado-banner">
+  <div class="fb-title">😴 Estamos fechados agora</div>
+  <div class="fb-sub" id="fb-sub"></div>
+  <button class="fb-btn" onclick="agendarFechado()">📅 Deixar pedido agendado</button>
+</div>
+
+<div id="progress-wrap">
+  <div class="progress-steps" id="progress-steps"></div>
+</div>
+
+<main>
+
+<!-- STEP 1: NOME -->
+<div class="step-card active" id="card-1">
+  <div class="step-header" onclick="toggleCard(1)">
+    <div class="step-num">1</div>
+    <span class="step-title">Seu Nome</span>
+    <span class="step-badge" id="badge-1">Obrigatório</span>
+  </div>
+  <div class="step-body open" id="body-1">
+    <label class="field-label">Como te chamamos? 👋</label>
+    <input class="field-input" id="inp-nome" type="text" placeholder="Seu nome..."
+      autocomplete="given-name" oninput="onNome()">
+    <div class="error-msg" id="err-nome">⚠️ Por favor, informe seu nome.</div>
+  </div>
+</div>
+
+<!-- STEP 2: CORREDORES -->
+<div class="step-card" id="card-2">
+  <div class="step-header" onclick="toggleCard(2)">
+    <div class="step-num">2</div>
+    <span class="step-title">Escolha o Corredor</span>
+    <span class="step-badge" id="badge-2">Escolha um corredor</span>
+  </div>
+  <div class="step-body" id="body-2">
+    <div class="cat-grid">
+      <div class="cat-card" id="cat-padaria" onclick="selectCategoria('padaria')">
+        <span class="cat-emoji">🥖</span>
+        <div class="cat-nome">Padaria</div>
+        <div class="cat-sub">Pães · Bolos</div>
+      </div>
+      <div class="cat-card" id="cat-hortifruti" onclick="selectCategoria('hortifruti')">
+        <span class="cat-emoji">🍎</span>
+        <div class="cat-nome">Hortifruti</div>
+        <div class="cat-sub">Frutas · Legumes</div>
+      </div>
+      <div class="cat-card" id="cat-laticinios" onclick="selectCategoria('laticinios')">
+        <span class="cat-emoji">🧀</span>
+        <div class="cat-nome">Laticínios</div>
+        <div class="cat-sub">Leites · Queijos</div>
+      </div>
+      <div class="cat-card" id="cat-frios" onclick="selectCategoria('frios')">
+        <span class="cat-emoji">🥓</span>
+        <div class="cat-nome">Frios & Embutidos</div>
+        <div class="cat-sub">Salame · Presunto</div>
+      </div>
+      <div class="cat-card" id="cat-mercearia" onclick="selectCategoria('mercearia')">
+        <span class="cat-emoji">🌾</span>
+        <div class="cat-nome">Mercearia</div>
+        <div class="cat-sub">Farinhas · Grãos</div>
+      </div>
+      <div class="cat-card" id="cat-bebidas" onclick="selectCategoria('bebidas')">
+        <span class="cat-emoji">🍷</span>
+        <div class="cat-nome">Bebidas</div>
+        <div class="cat-sub">Vinhos · Sucos</div>
+      </div>
+      <div class="cat-card" id="cat-higiene" onclick="selectCategoria('higiene')">
+        <span class="cat-emoji">🧴</span>
+        <div class="cat-nome">Higiene</div>
+        <div class="cat-sub">Limpeza · Pessoal</div>
+      </div>
+      <div class="cat-card" id="cat-bebe" onclick="selectCategoria('bebe')">
+        <span class="cat-emoji">🍼</span>
+        <div class="cat-nome">Bebê & Fraldas</div>
+        <div class="cat-sub">Fraldas · Lenços</div>
+      </div>
+    </div>
+    <div class="error-msg" id="err-cat">⚠️ Selecione um corredor para continuar.</div>
+  </div>
+</div>
+
+<!-- STEP 3: PRODUTOS (com qty inline) -->
+<div class="step-card" id="card-3">
+  <div class="step-header" onclick="toggleCard(3)">
+    <div class="step-num">3</div>
+    <span class="step-title" id="step3-title">Produtos</span>
+    <span class="step-badge" id="badge-3">Clique para adicionar</span>
+  </div>
+  <div class="step-body" id="body-3">
+    <div class="info-banner" id="info-banner">👆 Clique no produto → ele entra no carrinho. Use + e − para ajustar a quantidade.</div>
+    <div class="prod-grid" id="prod-grid"></div>
+    <div class="error-msg" id="err-prod">⚠️ Selecione pelo menos um produto.</div>
+  </div>
+</div>
+
+<!-- STEP 4: (vazio / opcional) -->
+<div class="step-card" id="card-4" style="display:none">
+  <div class="step-header" onclick="toggleCard(4)">
+    <div class="step-num">4</div>
+    <span class="step-title">Extras</span>
+    <span class="step-badge">Opcional</span>
+  </div>
+  <div class="step-body" id="body-4"></div>
+</div>
+
+<!-- STEP 5: QUANTIDADE (escondido – qty é inline) -->
+<div class="step-card" id="card-5" style="display:none">
+  <div class="step-header"><div class="step-num">5</div><span class="step-title">Qtd</span></div>
+  <div class="step-body" id="body-5"></div>
+</div>
+
+<!-- STEP 6: CUPOM -->
+<div class="step-card" id="card-6">
+  <div class="step-header" onclick="toggleCard(6)">
+    <div class="step-num">6</div>
+    <span class="step-title">Cupom de Desconto</span>
+    <span class="step-badge" id="badge-6">Opcional</span>
+  </div>
+  <div class="step-body" id="body-6">
+    <div class="cupom-row">
+      <input class="field-input" id="inp-cupom" type="text" placeholder="Ex: MERCADO10"
+        style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+      <button class="btn-cupom" onclick="aplicarCupom()">Aplicar</button>
+    </div>
+    <div class="cupom-ok" id="cupom-ok"></div>
+    <div class="cupom-err" id="cupom-err"></div>
+  </div>
+</div>
+
+<!-- STEP 7: OBSERVAÇÕES -->
+<div class="step-card" id="card-7">
+  <div class="step-header" onclick="toggleCard(7)">
+    <div class="step-num">7</div>
+    <span class="step-title">Observações</span>
+    <span class="step-badge">Opcional</span>
+  </div>
+  <div class="step-body" id="body-7">
+    <textarea class="field-input" id="inp-obs" rows="3"
+      placeholder="Ex: pão bem passado, frutas maduras, troco para quanto…"
+      oninput="updateResumo()" style="resize:none;"></textarea>
+  </div>
+</div>
+
+<!-- STEP 8: ENTREGA -->
+<div class="step-card" id="card-8">
+  <div class="step-header" onclick="toggleCard(8)">
+    <div class="step-num">8</div>
+    <span class="step-title">Como vai receber?</span>
+    <span class="step-badge" id="badge-8">Obrigatório</span>
+  </div>
+  <div class="step-body" id="body-8">
+    <div class="entrega-row">
+      <div class="ent-btn" id="ent-ret" onclick="selectEntrega('retirada')">
+        <span class="ent-emoji">🏪</span><div class="ent-lbl">Retirar no Mercado</div><div class="ent-sub">Sem taxa</div>
+      </div>
+      <div class="ent-btn" id="ent-del" onclick="selectEntrega('delivery')">
+        <span class="ent-emoji">🛵</span><div class="ent-lbl">Delivery</div><div class="ent-sub">Informe o endereço</div>
+      </div>
+    </div>
+
+    <div id="delivery-wrap" style="display:none;margin-top:16px;">
+      <div class="sub-lbl">📍 Bairros:</div>
+      <div class="bairro-grid">
+        <div class="bairro-btn" onclick="selectBairro(this,'Jd. São Miguel',5)"><div class="bairro-nome">Jd. São Miguel</div><div class="bairro-taxa">+R$ 5,00</div></div>
+        <div class="bairro-btn" onclick="selectBairro(this,'Jd. Iguatemi',7)"><div class="bairro-nome">Jd. Iguatemi</div><div class="bairro-taxa">+R$ 7,00</div></div>
+        <div class="bairro-btn" onclick="selectBairro(this,'Vila Mota',8)"><div class="bairro-nome">Vila Mota</div><div class="bairro-taxa">+R$ 8,00</div></div>
+        <div class="bairro-btn" onclick="selectBairro(this,'Centro',8)"><div class="bairro-nome">Centro</div><div class="bairro-taxa">+R$ 8,00</div></div>
+        <div class="bairro-btn" onclick="selectBairro(this,'Lago do Taboão',12)"><div class="bairro-nome">Lago do Taboão</div><div class="bairro-taxa">+R$ 12,00</div></div>
+        <div class="bairro-btn" onclick="selectBairro(this,'Jd. do Sul',12)"><div class="bairro-nome">Jd. do Sul</div><div class="bairro-taxa">+R$ 12,00</div></div>
+      </div>
+
+      <div class="outro-wrap" style="margin-top:14px;">
+        <div class="outro-title">📦 Outro bairro? Calcule pelo CEP:</div>
+        <div class="cep-btn-row">
+          <input class="field-input" id="inp-cep-calc" type="text" placeholder="CEP (00000-000)" maxlength="9"
+            oninput="fmtCepCalc(this)" autocomplete="postal-code">
+          <button class="btn-buscar" onclick="calcularFrete()">🔍 Calcular</button>
+        </div>
+        <div class="taxa-resultado" id="taxa-resultado">
+          <span id="taxa-txt"></span>
+          <div class="dist-detalhe" id="dist-detalhe"></div>
+        </div>
+      </div>
+
+      <div class="end-wrap" id="end-wrap">
+        <div class="sub-lbl" style="margin-bottom:8px;">🏠 Endereço completo:</div>
+        <div class="cep-btn-row" style="margin-bottom:5px;">
+          <input class="field-input" id="inp-cep" type="text" placeholder="CEP" maxlength="9"
+            oninput="fmtCep(this)" autocomplete="postal-code">
+          <button class="btn-buscar" onclick="buscarCep()">🔍</button>
+        </div>
+        <div class="cep-ok-msg" id="cep-ok">✅ Endereço encontrado!</div>
+        <div class="rua-num">
+          <div>
+            <label class="field-label">Rua / Avenida</label>
+            <input class="field-input" id="inp-rua" placeholder="Nome da rua" autocomplete="street-address">
+          </div>
+          <div>
+            <label class="field-label">Número</label>
+            <input class="field-input" id="inp-num" placeholder="Nº">
+          </div>
+        </div>
+        <div class="addr-2col">
+          <div>
+            <label class="field-label">Bairro</label>
+            <input class="field-input" id="inp-bairro" placeholder="Bairro">
+          </div>
+          <div>
+            <label class="field-label">Cidade</label>
+            <input class="field-input" id="inp-cidade" placeholder="Cidade">
+          </div>
+          <div class="addr-full">
+            <label class="field-label">Complemento / Referência</label>
+            <input class="field-input" id="inp-comp" placeholder="Apto, bloco, ponto de referência…">
+          </div>
+        </div>
+      </div>
+
+      <div class="minimo-warn" id="minimo-warn">⚠️ Pedido mínimo para delivery: <strong>R$ 25,00</strong></div>
+    </div>
+
+    <div class="horario-bloco" id="horario-bloco" style="display:none;">
+      <div class="horario-info">🕐 Seg–Sáb: 7h às 20h &nbsp;|&nbsp; Dom: 7h às 13h</div>
+      <div class="sub-lbl">⏰ Quando você quer receber?</div>
+      <div class="pills" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:9px;">
+        <div class="pill" id="pill-rapido" onclick="selectHorario(this,'⚡ O mais rápido possível')" style="border:2.5px solid #BBF7D0;border-radius:30px;padding:8px 18px;cursor:pointer;font-weight:800;font-size:.88rem;color:var(--roxo);background:white;">⚡ O mais rápido possível</div>
+        <div class="pill" id="pill-agendar" onclick="selectHorario(this,'agendar')" style="border:2.5px solid #BBF7D0;border-radius:30px;padding:8px 18px;cursor:pointer;font-weight:800;font-size:.88rem;color:var(--roxo);background:white;">📅 Agendar horário</div>
+      </div>
+      <div id="hor-input" style="display:none;margin-top:11px;">
+        <label class="field-label">Horário desejado:</label>
+        <input class="field-input" id="inp-horario" type="datetime-local" oninput="updateResumo()">
+      </div>
+    </div>
+
+    <div class="error-msg" id="err-entrega">⚠️ Selecione como vai receber.</div>
+  </div>
+</div>
+
+<!-- RESUMO -->
+<div id="resumo">
+  <div class="resumo-title">🛒 Resumo do Pedido</div>
+  <div id="r-linhas"><div class="r-linha"><span class="r-key">Nada selecionado ainda</span><span class="r-val">—</span></div></div>
+  <div class="r-total">
+    <span class="r-total-lbl">TOTAL ESTIMADO</span>
+    <span class="r-total-val" id="r-total">R$ 0,00</span>
+  </div>
+</div>
+
+<button id="btn-zap" onclick="enviarZap()">
+  💬 Enviar pelo WhatsApp
+</button>
+<div class="error-msg" id="err-zap" style="text-align:center;font-size:.9rem;"></div>
+
+</main>
+
+<!-- FLOAT BAR -->
+<div id="float-bar">
+  <div class="fb-cart-btn" onclick="abrirDrawer()">
+    <span class="fb-cart-icon">🛒</span>
+    <span class="fb-cart-badge" id="fb-badge"></span>
+  </div>
+  <div class="fb-total-wrap">
+    <span class="fb-lbl">Total estimado</span>
+    <span class="fb-total" id="fb-total">R$ 0,00</span>
+  </div>
+  <button class="fb-pedir" onclick="enviarZap()">📲 Pedir</button>
+</div>
+
+<div id="cart-overlay" onclick="fecharDrawer()"></div>
+<div id="cart-drawer">
+  <div class="drawer-handle" onclick="fecharDrawer()"></div>
+  <div class="drawer-header">
+    <span class="drawer-title">🛒 Seu Carrinho</span>
+    <button class="drawer-close" onclick="fecharDrawer()">✕ Fechar</button>
+  </div>
+  <div class="drawer-body">
+    <div class="di-wrap" id="drawer-lista">
+      <div class="drawer-empty">Carrinho vazio<br><span style="font-size:1.5rem">🛒</span></div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <div class="df-total">
+      <span class="df-total-lbl">Total do carrinho</span>
+      <span class="df-total-val" id="drawer-total">R$ 0,00</span>
+    </div>
+    <button class="df-add-btn" onclick="fecharDrawer();scrollParaCat()">＋ Continuar comprando</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<div id="tela-obrigado">
+  <div class="obg-emoji" id="obg-emoji">🛒</div>
+  <div class="obg-title" id="obg-title">Pedido enviado!</div>
+  <div class="obg-msg" id="obg-msg"></div>
+  <button class="obg-btn" onclick="fecharObrigado()">🏠 Fazer outro pedido</button>
+</div>
+
+<div class="stripe-band"></div>
+<footer>
+  <strong>Faço Pedidos · Mercadinho</strong> · Fruteira & Mercearia de Bairro<br>
+  📱 (11) 93494-1652 · @facopedidos
+</footer>
+
+<script>
+/* ══ CONFIG ══ */
+const SB_URL = 'https://qfrsfdqbhgunykgvozcx.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFmcnNmZHFiaGd1bnlrZ3ZvemN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MDM2MjAsImV4cCI6MjA5NDA3OTYyMH0.tzFThSsbOviLDd_f9rmNylPF7v5rmrbXl3JR7vL7_so';
+const LOJA_LAT   = -22.9534;
+const LOJA_LNG   = -46.5420;
+const VALOR_KM   = 2.00;
+const MINIMO_DEL = 25;
+const HORARIOS   = {0:{a:7,f:13},1:{a:7,f:20},2:{a:7,f:20},3:{a:7,f:20},4:{a:7,f:20},5:{a:7,f:20},6:{a:7,f:20}};
+const ZAP_NUM    = '5511934941652';
+
+const CUPONS = {
+  'MERCADO10': { codigo:'MERCADO10', tipo:'pct', valor:10, desc:'10% de desconto' }
+};
+
+/* ══ CARDÁPIO POR CORREDOR ══ */
+const CARDAPIO = {
+  padaria: [
+    {id:'pao-frances', nome:'Pão Francês', desc:'Unidade', preco:0.90, unidade:'un'},
+    {id:'pao-forma', nome:'Pão de Forma', desc:'Pacote 500g', preco:9.90, unidade:'pct'},
+    {id:'pao-integral', nome:'Pão Integral', desc:'Unidade', preco:1.20, unidade:'un'},
+    {id:'baguete', nome:'Baguete', desc:'Unidade', preco:6.50, unidade:'un'},
+    {id:'bolo-fuba', nome:'Bolo de Fubá', desc:'Fatia', preco:4.50, unidade:'un'},
+    {id:'sonho', nome:'Sonho', desc:'Unidade', preco:5.90, unidade:'un'},
+    {id:'croissant', nome:'Croissant', desc:'Unidade', preco:7.90, unidade:'un'},
+    {id:'pao-queijo', nome:'Pão de Queijo', desc:'Unidade', preco:2.50, unidade:'un'},
+  ],
+  hortifruti: [
+    {id:'banana', nome:'Banana Prata', desc:'Kg', preco:6.90, unidade:'kg'},
+    {id:'maca', nome:'Maçã Fuji', desc:'Kg', preco:12.90, unidade:'kg'},
+    {id:'laranja', nome:'Laranja Pera', desc:'Kg', preco:5.90, unidade:'kg'},
+    {id:'tomate', nome:'Tomate', desc:'Kg', preco:8.90, unidade:'kg'},
+    {id:'alface', nome:'Alface Crespa', desc:'Unidade', preco:3.50, unidade:'un'},
+    {id:'cenoura', nome:'Cenoura', desc:'Kg', preco:4.90, unidade:'kg'},
+    {id:'batata', nome:'Batata Inglesa', desc:'Kg', preco:5.50, unidade:'kg'},
+    {id:'cebola', nome:'Cebola', desc:'Kg', preco:4.90, unidade:'kg'},
+    {id:'limao', nome:'Limão Tahiti', desc:'Kg', preco:6.50, unidade:'kg'},
+    {id:'mamao', nome:'Mamão Formosa', desc:'Kg', preco:7.90, unidade:'kg'},
+  ],
+  laticinios: [
+    {id:'leite-integral', nome:'Leite Integral 1L', desc:'Caixa', preco:5.49, unidade:'un'},
+    {id:'leite-desnatado', nome:'Leite Desnatado 1L', desc:'Caixa', preco:5.29, unidade:'un'},
+    {id:'queijo-mussarela', nome:'Mussarela', desc:'Kg (aprox 200g)', preco:42.90, unidade:'kg'},
+    {id:'queijo-prato', nome:'Queijo Prato', desc:'Kg', preco:38.90, unidade:'kg'},
+    {id:'requeijao', nome:'Requeijão 200g', desc:'Pote', preco:6.90, unidade:'un'},
+    {id:'iogurte', nome:'Iogurte Natural 170g', desc:'Unidade', preco:3.49, unidade:'un'},
+    {id:'manteiga', nome:'Manteiga 200g', desc:'Pote', preco:12.90, unidade:'un'},
+    {id:'creme-leite', nome:'Creme de Leite 200g', desc:'Caixa', preco:3.99, unidade:'un'},
+  ],
+  frios: [
+    {id:'presunto', nome:'Presunto', desc:'Kg', preco:32.90, unidade:'kg'},
+    {id:'mortadela', nome:'Mortadela', desc:'Kg', preco:24.90, unidade:'kg'},
+    {id:'salame', nome:'Salame Italiano', desc:'Kg', preco:58.90, unidade:'kg'},
+    {id:'peito-peru', nome:'Peito de Peru', desc:'Kg', preco:45.90, unidade:'kg'},
+    {id:'salsicha', nome:'Salsicha Avícola', desc:'Pct 500g', preco:9.90, unidade:'pct'},
+    {id:'bacon', nome:'Bacon', desc:'Kg', preco:39.90, unidade:'kg'},
+  ],
+  mercearia: [
+    {id:'arroz', nome:'Arroz Tipo 1 5kg', desc:'Pacote', preco:24.90, unidade:'pct'},
+    {id:'feijao', nome:'Feijão Carioca 1kg', desc:'Pacote', preco:8.90, unidade:'pct'},
+    {id:'acucar', nome:'Açúcar Cristal 1kg', desc:'Pacote', preco:4.49, unidade:'pct'},
+    {id:'farinha-trigo', nome:'Farinha de Trigo 1kg', desc:'Pacote', preco:5.90, unidade:'pct'},
+    {id:'macarrao', nome:'Macarrão Espaguete 500g', desc:'Pacote', preco:4.29, unidade:'pct'},
+    {id:'oleo', nome:'Óleo de Soja 900ml', desc:'Garrafa', preco:7.90, unidade:'un'},
+    {id:'cafe', nome:'Café Torrado 500g', desc:'Pacote', preco:18.90, unidade:'pct'},
+    {id:'sal', nome:'Sal Refinado 1kg', desc:'Pacote', preco:2.49, unidade:'pct'},
+  ],
+  bebidas: [
+    {id:'agua', nome:'Água Mineral 1,5L', desc:'Garrafa', preco:2.99, unidade:'un'},
+    {id:'refri-lata', nome:'Refrigerante Lata 350ml', desc:'Unidade', preco:4.49, unidade:'un'},
+    {id:'refri-2l', nome:'Refrigerante 2L', desc:'Garrafa', preco:9.90, unidade:'un'},
+    {id:'suco', nome:'Suco de Caixa 1L', desc:'Caixa', preco:6.90, unidade:'un'},
+    {id:'cerveja', nome:'Cerveja Lata 350ml', desc:'Unidade', preco:3.99, unidade:'un'},
+    {id:'vinho-tinto', nome:'Vinho Tinto Seco 750ml', desc:'Garrafa', preco:39.90, unidade:'un'},
+    {id:'vinho-branco', nome:'Vinho Branco 750ml', desc:'Garrafa', preco:42.90, unidade:'un'},
+  ],
+  higiene: [
+    {id:'sabonete', nome:'Sabonete 90g', desc:'Unidade', preco:2.49, unidade:'un'},
+    {id:'shampoo', nome:'Shampoo 350ml', desc:'Frasco', preco:14.90, unidade:'un'},
+    {id:'papel-hig', nome:'Papel Higiênico 12un', desc:'Pacote', preco:18.90, unidade:'pct'},
+    {id:'detergente', nome:'Detergente 500ml', desc:'Frasco', preco:2.99, unidade:'un'},
+    {id:'amaciante', nome:'Amaciante 2L', desc:'Garrafa', preco:12.90, unidade:'un'},
+    {id:'sabao-po', nome:'Sabão em Pó 1kg', desc:'Caixa', preco:15.90, unidade:'pct'},
+  ],
+  bebe: [
+    {id:'fralda-p', nome:'Fralda P (pct 30)', desc:'Pacote', preco:32.90, unidade:'pct'},
+    {id:'fralda-m', nome:'Fralda M (pct 30)', desc:'Pacote', preco:34.90, unidade:'pct'},
+    {id:'fralda-g', nome:'Fralda G (pct 24)', desc:'Pacote', preco:36.90, unidade:'pct'},
+    {id:'lenco', nome:'Lenço Umedecido', desc:'Pacote 50un', preco:12.90, unidade:'pct'},
+    {id:'pomada', nome:'Pomada Assadura', desc:'Tubo', preco:18.90, unidade:'un'},
+  ]
+};
+
+const CAT_EMOJIS = {
+  padaria:'🥖', hortifruti:'🍎', laticinios:'🧀', frios:'🥓',
+  mercearia:'🌾', bebidas:'🍷', higiene:'🧴', bebe:'🍼'
+};
+
+const CAT_NOMES = {
+  padaria:'Padaria', hortifruti:'Hortifruti', laticinios:'Laticínios', frios:'Frios & Embutidos',
+  mercearia:'Mercearia', bebidas:'Bebidas', higiene:'Higiene', bebe:'Bebê & Fraldas'
+};
+
+/* ══ STATE ══ */
+const S = {
+  nome:'',
+  categoria:null,
+  entrega:null, bairroNome:null, frete:0,
+  horario:null, cupom:null, desconto:0, agendado:false
+};
+let carrinho = []; // {id, nome, preco, unidade, qty, total}
+
+/* ══ FRASES ══ */
+const FRASES = [
+  'Que bom que você voltou! 🛒','Saudades das suas compras! 🥖','Mais uma visitinha no mercadinho! 🍎',
+  'Você é nosso cliente especial! ⭐','Pronto para encher o carrinho? 🛒','A gente tava esperando você! 😄',
+  'Bem-vindo de volta ao bairro! 🌟','Que delícia ter você aqui! 🧀',
+  'Sua fidelidade é nossa alegria! 💛','O pão quentinho te espera! 🚀'
+];
+const OBG_MSGS = [
+  'Em breve confirmamos seu pedido! 🛒','Seu pedido está sendo preparado! 🥖',
+  'Separando tudo com carinho! 🍎','Logo chega fresquinho na sua casa! 🌟','Obrigado pela preferência! 💛'
+];
+
+/* ══ PROGRESS ══ */
+const STEPS_LBL = ['Nome','Corredor','Produtos','—','—','Cupom','Obs','Entrega'];
+function buildProgress(){
+  const el = document.getElementById('progress-steps');
+  let html = '';
+  STEPS_LBL.forEach((lbl,i) => {
+    if(i > 0) html += `<div class="ps-line" id="pline-${i}"></div>`;
+    html += `<div class="ps" id="ps-${i+1}" onclick="goToStep(${i+1})">
+      <div class="ps-dot">${i+1}</div>
+      <div class="ps-lbl">${lbl}</div>
+    </div>`;
+  });
+  el.innerHTML = html;
+}
+function updateProgress(active){
+  STEPS_LBL.forEach((_,i) => {
+    const n = i+1, el = document.getElementById('ps-'+n);
+    if(!el) return;
+    el.classList.remove('done','active');
+    if(n < active) el.classList.add('done');
+    else if(n === active) el.classList.add('active');
+    if(i > 0){
+      const ln = document.getElementById('pline-'+i);
+      if(ln) ln.classList.toggle('done', n <= active);
+    }
+  });
+}
+function goToStep(n){
+  openCard(n);
+  document.getElementById('card-'+n)?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ══ HORÁRIO / STATUS ══ */
+function checkHorario(){
+  const now = new Date(), dia = now.getDay(), h = now.getHours() + now.getMinutes()/60;
+  const cfg = HORARIOS[dia];
+  const aberto = h >= cfg.a && h < cfg.f;
+  const bar = document.getElementById('status-bar');
+  if(aberto){
+    bar.className = 'aberto';
+    bar.innerHTML = `✅ Abertos agora! <span>Fechamos às ${cfg.f}h</span>`;
+  } else {
+    bar.className = 'fechado';
+    bar.innerHTML = `🔴 Fechados agora <span>${proximaAbertura(dia,h)}</span>`;
+    document.getElementById('fechado-banner').style.display = 'block';
+    document.getElementById('fb-sub').textContent = proximaAbertura(dia,h) + '. Deixe seu pedido agendado!';
+  }
+  return aberto;
+}
+function proximaAbertura(dia, h){
+  if(h < HORARIOS[dia].a) return `Abrimos hoje às ${HORARIOS[dia].a}h`;
+  const dias = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+  for(let i = 1; i <= 7; i++){
+    const d = (dia+i) % 7;
+    return `Abrimos ${dias[d]} às ${HORARIOS[d].a}h`;
+  }
+}
+function agendarFechado(){
+  S.agendado = true;
+  document.getElementById('fechado-banner').style.display = 'none';
+  selectEntrega('delivery');
+  openCard(8);
+  document.getElementById('card-8').scrollIntoView({behavior:'smooth'});
+  setTimeout(() => {
+    document.getElementById('horario-bloco').style.display = 'block';
+    document.getElementById('pill-agendar')?.click();
+  }, 300);
+}
+
+/* ══ CACHE ══ */
+function initCache(){
+  const c = JSON.parse(localStorage.getItem('faco_pedidos') || '{}');
+  if(c.nome){
+    const v = (c.visitas || 0) + 1;
+    c.visitas = v;
+    localStorage.setItem('faco_pedidos', JSON.stringify(c));
+    document.getElementById('bv-texto').textContent = `Olá, ${c.nome}! 👋`;
+    document.getElementById('bv-frase').textContent = FRASES[(v-2) % FRASES.length];
+    document.getElementById('boas-vindas').style.display = 'block';
+    if(c.ultimoPedido) document.getElementById('btn-repetir').style.display = 'inline-flex';
+  } else {
+    localStorage.setItem('faco_pedidos', JSON.stringify({...c, visitas:1}));
+  }
+  if(c.nome) document.getElementById('inp-nome').value = c.nome;
+  preencherEnderecoCache(c);
+}
+function preencherEnderecoCache(c){
+  if(c.cep)      document.getElementById('inp-cep').value     = c.cep;
+  if(c.rua)      document.getElementById('inp-rua').value     = c.rua;
+  if(c.num)      document.getElementById('inp-num').value     = c.num;
+  if(c.bairroEnd)document.getElementById('inp-bairro').value  = c.bairroEnd;
+  if(c.cidade)   document.getElementById('inp-cidade').value  = c.cidade;
+  if(c.comp)     document.getElementById('inp-comp').value    = c.comp;
+  if(c.cep || c.rua) document.getElementById('cep-ok').style.display = 'block';
+}
+function confirmarId(sim){
+  if(sim){
+    const c = JSON.parse(localStorage.getItem('faco_pedidos') || '{}');
+    document.getElementById('inp-nome').value = c.nome || '';
+    S.nome = c.nome || '';
+    onNome();
+  } else {
+    localStorage.removeItem('faco_pedidos');
+    document.getElementById('inp-nome').value = '';
+    S.nome = '';
+  }
+  document.getElementById('boas-vindas').style.display = 'none';
+  updateResumo();
+}
+function salvarCache(){
+  const c = JSON.parse(localStorage.getItem('faco_pedidos') || '{}');
+  Object.assign(c, {
+    nome: S.nome,
+    cep:       document.getElementById('inp-cep')?.value || '',
+    rua:       document.getElementById('inp-rua')?.value || '',
+    num:       document.getElementById('inp-num')?.value || '',
+    bairroEnd: document.getElementById('inp-bairro')?.value || '',
+    cidade:    document.getElementById('inp-cidade')?.value || '',
+    comp:      document.getElementById('inp-comp')?.value || '',
+    ultimoPedido: { items: carrinho }
+  });
+  localStorage.setItem('faco_pedidos', JSON.stringify(c));
+}
+function repetirUltimo(){
+  const c = JSON.parse(localStorage.getItem('faco_pedidos') || '{}');
+  if(c.nome){ S.nome = c.nome; document.getElementById('inp-nome').value = c.nome; onNome(); }
+  document.getElementById('boas-vindas').style.display = 'none';
+  updateResumo();
+}
+
+/* ══ CARDS ══ */
+function toggleCard(n){
+  const b = document.getElementById('body-'+n), c = document.getElementById('card-'+n);
+  b.classList.toggle('open');
+  c.classList.toggle('active', b.classList.contains('open'));
+  updateProgress(n);
+}
+function openCard(n){
+  const b = document.getElementById('body-'+n), c = document.getElementById('card-'+n);
+  if(!b?.classList.contains('open')){ b?.classList.add('open'); c?.classList.add('active'); }
+  updateProgress(n);
+}
+function markDone(n){ document.getElementById('card-'+n)?.classList.add('done'); }
+function markError(n){
+  const c = document.getElementById('card-'+n);
+  c?.classList.add('has-error');
+  setTimeout(() => c?.classList.remove('has-error'), 1500);
+}
+
+/* ══ STEP 1 ══ */
+function onNome(){
+  S.nome = document.getElementById('inp-nome').value.trim();
+  document.getElementById('badge-1').textContent = S.nome || 'Obrigatório';
+  document.getElementById('err-nome').classList.remove('show');
+  document.getElementById('inp-nome').classList.toggle('input-ok', !!S.nome);
+  if(S.nome) markDone(1);
+  updateResumo();
+}
+
+/* ══ STEP 2: CORREDOR ══ */
+function selectCategoria(cat){
+  S.categoria = cat;
+  document.querySelectorAll('.cat-card').forEach(el => el.classList.remove('selected'));
+  document.getElementById('cat-'+cat)?.classList.add('selected');
+  document.getElementById('badge-2').textContent = CAT_NOMES[cat] + ' ✓';
+  markDone(2);
+
+  document.getElementById('step3-title').textContent = CAT_NOMES[cat];
+  document.getElementById('badge-3').textContent = 'Clique para adicionar';
+  buildProdutos(cat);
+
+  openCard(3);
+  document.getElementById('card-3').scrollIntoView({behavior:'smooth', block:'start'});
+  updateResumo();
+}
+
+/* ══ BUILD PRODUTOS COM QTY INLINE ══ */
+function buildProdutos(cat){
+  const grid = document.getElementById('prod-grid');
+  const lista = CARDAPIO[cat] || [];
+  grid.innerHTML = lista.map(p => {
+    const noCarrinho = carrinho.find(i => i.id === p.id);
+    const qty = noCarrinho ? noCarrinho.qty : 0;
+    const selected = qty > 0 ? 'selected' : '';
+    return `
+    <div class="prod-item ${selected}" id="prod-${p.id}" onclick="toggleProduto('${p.id}')">
+      <div class="prod-nome">${p.nome}</div>
+      <div class="prod-desc">${p.desc}</div>
+      <div class="prod-preco">R$ ${p.preco.toFixed(2).replace('.',',')} <span class="prod-unidade">/ ${p.unidade}</span></div>
+      <div class="prod-qty-row" onclick="event.stopPropagation()">
+        <button class="prod-qbtn" onclick="changeQtyProduto('${p.id}',-1)">−</button>
+        <span class="prod-qnum" id="qty-${p.id}">${qty || 1}</span>
+        <button class="prod-qbtn" onclick="changeQtyProduto('${p.id}',1)">+</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ══ LÓGICA DE SELEÇÃO + QTY ══ */
+function toggleProduto(id){
+  const item = findProduto(id);
+  if(!item) return;
+  const noCarrinho = carrinho.find(i => i.id === id);
+  if(noCarrinho){
+    // já está selecionado → não faz nada no clique do card (só nos botões)
+    return;
+  }
+  // adiciona com qty 1
+  carrinho.push({
+    id: item.id,
+    nome: item.nome,
+    preco: item.preco,
+    unidade: item.unidade,
+    qty: 1,
+    total: item.preco
+  });
+  atualizarCardProduto(id);
+  renderDrawer();
+  updateResumo();
+  mostrarToast(`✅ ${item.nome} adicionado`);
+}
+
+function changeQtyProduto(id, delta){
+  const idx = carrinho.findIndex(i => i.id === id);
+  if(idx === -1 && delta > 0){
+    // ainda não está no carrinho
+    toggleProduto(id);
+    return;
+  }
+  if(idx === -1) return;
+
+  carrinho[idx].qty += delta;
+  if(carrinho[idx].qty <= 0){
+    carrinho.splice(idx, 1);
+  } else {
+    carrinho[idx].total = carrinho[idx].preco * carrinho[idx].qty;
+  }
+  atualizarCardProduto(id);
+  renderDrawer();
+  updateResumo();
+}
+
+function atualizarCardProduto(id){
+  const el = document.getElementById('prod-'+id);
+  if(!el) return;
+  const noCarrinho = carrinho.find(i => i.id === id);
+  const qtyEl = document.getElementById('qty-'+id);
+  if(noCarrinho){
+    el.classList.add('selected');
+    if(qtyEl) qtyEl.textContent = noCarrinho.qty;
+  } else {
+    el.classList.remove('selected');
+    if(qtyEl) qtyEl.textContent = 1;
+  }
+}
+
+function findProduto(id){
+  for(const cat in CARDAPIO){
+    const found = CARDAPIO[cat].find(p => p.id === id);
+    if(found) return found;
+  }
+  return null;
+}
+
+/* ══ ENTREGA ══ */
+function selectEntrega(tipo){
+  S.entrega = tipo; S.frete = 0; S.bairroNome = null;
+  document.getElementById('ent-ret').classList.toggle('selected', tipo === 'retirada');
+  document.getElementById('ent-del').classList.toggle('selected', tipo === 'delivery');
+  document.getElementById('delivery-wrap').style.display = tipo === 'delivery' ? 'block' : 'none';
+  document.getElementById('horario-bloco').style.display = 'block';
+  document.getElementById('badge-8').textContent = tipo === 'retirada' ? 'Retirada ✓' : 'Delivery…';
+  document.getElementById('err-entrega').classList.remove('show');
+  if(tipo === 'retirada') markDone(8);
+  updateResumo();
+}
+
+function selectBairro(el, nome, taxa){
+  S.bairroNome = nome; S.frete = taxa;
+  document.querySelectorAll('.bairro-btn').forEach(b => b.classList.remove('selected'));
+  if(el) el.classList.add('selected');
+  document.getElementById('badge-8').textContent = `Delivery: ${nome} ✓`;
+  markDone(8);
+  checkMinimo();
+  updateResumo();
+  document.getElementById('inp-bairro').value = nome;
+}
+
+function checkMinimo(){
+  const sub = calcCarrinho();
+  document.getElementById('minimo-warn').classList.toggle(
+    'show', S.entrega === 'delivery' && sub > 0 && sub < MINIMO_DEL
+  );
+}
+
+/* ══ CEP ══ */
+let _sincCep = false;
+function fmtCep(el){
+  let v = el.value.replace(/\D/g,'').substring(0,8);
+  if(v.length > 5) v = v.substring(0,5)+'-'+v.substring(5);
+  el.value = v;
+  if(!_sincCep){
+    _sincCep = true;
+    const calc = document.getElementById('inp-cep-calc');
+    if(calc && calc.value !== v) calc.value = v;
+    _sincCep = false;
+  }
+  if(v.length === 9) buscarCep();
+}
+function fmtCepCalc(el){
+  let v = el.value.replace(/\D/g,'').substring(0,8);
+  if(v.length > 5) v = v.substring(0,5)+'-'+v.substring(5);
+  el.value = v;
+  if(!_sincCep){
+    _sincCep = true;
+    const end = document.getElementById('inp-cep');
+    if(end && end.value !== v) end.value = v;
+    _sincCep = false;
+  }
+}
+async function buscarCep(){
+  const cep = document.getElementById('inp-cep').value.replace(/\D/g,'');
+  if(cep.length !== 8) return;
+  try{
+    const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+    const d = await r.json();
+    if(d.erro) return;
+    document.getElementById('inp-rua').value    = d.logradouro || '';
+    document.getElementById('inp-bairro').value = d.bairro || '';
+    document.getElementById('inp-cidade').value = d.localidade || '';
+    document.getElementById('cep-ok').style.display = 'block';
+    document.getElementById('inp-num').focus();
+    updateResumo();
+  } catch(e){}
+}
+
+/* ══ FRETE ══ */
+async function calcularFrete(){
+  const cepRaw = document.getElementById('inp-cep-calc').value.replace(/\D/g,'');
+  if(cepRaw.length !== 8){ alert('CEP inválido'); return; }
+  const res = document.getElementById('taxa-resultado');
+  const txttxt = document.getElementById('taxa-txt');
+  const distEl = document.getElementById('dist-detalhe');
+  txttxt.textContent = '⏳ Calculando…';
+  distEl.textContent = '';
+  res.style.display = 'block';
+
+  let lat = null, lng = null, fonte = '';
+  try{
+    const url = `https://nominatim.openstreetmap.org/search?postalcode=${cepRaw}&country=BR&format=json&limit=1`;
+    const resp = await fetch(url, {headers:{'Accept-Language':'pt-BR','User-Agent':'FacoPedidos/1.0'}});
+    const data = await resp.json();
+    if(data && data[0]){ lat = parseFloat(data[0].lat); lng = parseFloat(data[0].lon); fonte = 'exato'; }
+  } catch(e){}
+
+  if(lat === null){
+    try{
+      const rv = await fetch(`https://viacep.com.br/ws/${cepRaw}/json/`);
+      const dv = await rv.json();
+      if(!dv.erro && dv.localidade){
+        const q = encodeURIComponent(dv.localidade+', '+dv.uf+', Brasil');
+        const rc = await fetch(`https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1`,
+          {headers:{'User-Agent':'FacoPedidos/1.0'}});
+        const dc = await rc.json();
+        if(dc && dc[0]){ lat = parseFloat(dc[0].lat); lng = parseFloat(dc[0].lon); fonte = 'cidade'; }
+      }
+    } catch(e){}
+  }
+
+  if(lat === null){ txttxt.textContent = '❌ CEP não encontrado. Escolha um bairro acima.'; return; }
+
+  const km   = haversine(LOJA_LAT, LOJA_LNG, lat, lng);
+  const taxa = Math.max(5, Math.round(km * VALOR_KM * 2) / 2);
+  S.bairroNome = 'Calculado pelo CEP';
+  S.frete = taxa;
+  document.getElementById('badge-8').textContent = `Delivery: ~${km.toFixed(1)}km ✓`;
+  markDone(8);
+  txttxt.textContent = `🛵 Taxa de entrega: R$ ${taxa.toFixed(2).replace('.',',')}`;
+  distEl.textContent = `Distância aproximada: ${km.toFixed(1)} km${fonte === 'cidade' ? ' (estimativa pela cidade)' : ''}`;
+  res.style.borderColor = 'var(--verde)';
+
+  _sincCep = true;
+  document.getElementById('inp-cep').value = document.getElementById('inp-cep-calc').value;
+  _sincCep = false;
+
+  await buscarCep();
+  checkMinimo();
+  updateResumo();
+}
+
+function haversine(lat1,lon1,lat2,lon2){
+  const R = 6371, dLat = (lat2-lat1)*Math.PI/180, dLon = (lon2-lon1)*Math.PI/180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+/* ══ HORÁRIO ══ */
+function selectHorario(el, tipo){
+  document.querySelectorAll('#horario-bloco .pill').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+  el.style.background = 'var(--roxo)';
+  el.style.color = 'white';
+  if(tipo === 'agendar'){
+    document.getElementById('hor-input').style.display = 'block';
+    S.horario = null;
+  } else {
+    document.getElementById('hor-input').style.display = 'none';
+    S.horario = tipo;
+    updateResumo();
+  }
+}
+
+/* ══ CUPOM ══ */
+function aplicarCupom(){
+  const code = document.getElementById('inp-cupom').value.trim().toUpperCase();
+  const ok  = document.getElementById('cupom-ok');
+  const err = document.getElementById('cupom-err');
+  ok.style.display = 'none';
+  err.style.display = 'none';
+  if(CUPONS[code]){
+    S.cupom = CUPONS[code];
+    ok.textContent = '✅ Cupom aplicado: ' + S.cupom.desc;
+    ok.style.display = 'block';
+    document.getElementById('badge-6').textContent = S.cupom.desc;
+    markDone(6);
+  } else {
+    err.textContent = '❌ Cupom inválido.';
+    err.style.display = 'block';
+    S.cupom = null;
+  }
+  updateResumo();
+}
+
+/* ══ CARRINHO ══ */
+function calcCarrinho(){ return carrinho.reduce((s,it) => s + it.total, 0); }
+function calcTotal(){
+  const sub = calcCarrinho();
+  let desc = 0;
+  if(S.cupom){
+    if(S.cupom.tipo === 'pct') desc = sub * S.cupom.valor / 100;
+    else desc = S.cupom.valor;
+  }
+  S.desconto = Math.min(desc, sub);
+  return sub - S.desconto + S.frete;
+}
+function fmt(n){ return 'R$ ' + (n||0).toFixed(2).replace('.',','); }
+
+function renderDrawer(){
+  const lista = document.getElementById('drawer-lista');
+  const badge = document.getElementById('fb-badge');
+  const totalItens = carrinho.reduce((s,it) => s + it.qty, 0);
+  if(totalItens > 0){ badge.textContent = totalItens; badge.classList.add('show'); }
+  else badge.classList.remove('show');
+
+  if(carrinho.length === 0){
+    lista.innerHTML = '<div class="drawer-empty">Carrinho vazio<br><span style="font-size:1.5rem">🛒</span></div>';
+    document.getElementById('drawer-total').textContent = fmt(0);
+    updateResumo();
+    return;
+  }
+
+  lista.innerHTML = carrinho.map((it,i) => {
+    return `<div class="di">
+      <span class="di-emoji">🛒</span>
+      <div class="di-info">
+        <div class="di-nome">${it.nome}</div>
+        <div class="di-detalhe">${it.qty} ${it.unidade} × ${fmt(it.preco)}</div>
+      </div>
+      <div class="di-qty-row">
+        <button class="di-qbtn" onclick="changeQtyProduto('${it.id}',-1)">−</button>
+        <span class="di-qnum">${it.qty}</span>
+        <button class="di-qbtn" onclick="changeQtyProduto('${it.id}',1)">+</button>
+      </div>
+      <span class="di-preco">${fmt(it.total)}</span>
+      <button class="di-del" onclick="removerItem('${it.id}')">✕</button>
+    </div>`;
+  }).join('');
+
+  document.getElementById('drawer-total').textContent = fmt(calcCarrinho());
+  updateResumo();
+}
+
+function removerItem(id){
+  const idx = carrinho.findIndex(i => i.id === id);
+  if(idx >= 0) carrinho.splice(idx, 1);
+  atualizarCardProduto(id);
+  renderDrawer();
+  updateResumo();
+}
+
+function abrirDrawer(){
+  document.getElementById('cart-overlay').classList.add('open');
+  document.getElementById('cart-drawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function fecharDrawer(){
+  document.getElementById('cart-overlay').classList.remove('open');
+  document.getElementById('cart-drawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function scrollParaCat(){
+  document.getElementById('card-2').scrollIntoView({behavior:'smooth', block:'start'});
+  openCard(2);
+}
+
+/* ══ RESUMO ══ */
+function updateResumo(){
+  const horVal = document.getElementById('inp-horario')?.value;
+  if(horVal && document.getElementById('hor-input').style.display !== 'none') S.horario = horVal;
+  checkMinimo();
+
+  const total = calcTotal();
+  const lines = [];
+
+  if(S.nome) lines.push({k:'Cliente', v:S.nome});
+
+  carrinho.forEach((it,i) => {
+    lines.push({k:`${it.nome} × ${it.qty} ${it.unidade}`, v:fmt(it.total)});
+  });
+
+  if(S.entrega) lines.push({k:'Entrega', v:S.entrega === 'retirada' ? '🏪 Retirada' : '🛵 Delivery'});
+  if(S.bairroNome) lines.push({k:'Bairro/Região', v:S.bairroNome});
+  if(S.frete > 0) lines.push({k:'Taxa entrega', v:fmt(S.frete)});
+  if(S.entrega === 'delivery'){
+    const rua = document.getElementById('inp-rua')?.value?.trim();
+    const num = document.getElementById('inp-num')?.value?.trim();
+    const addr = [rua,num].filter(Boolean).join(', ');
+    if(addr) lines.push({k:'Endereço', v:addr});
+  }
+  if(S.horario) lines.push({k:'Horário', v:S.horario});
+  if(S.desconto > 0) lines.push({k:'Desconto', v:'− '+fmt(S.desconto), verde:true});
+  const obs = document.getElementById('inp-obs')?.value?.trim();
+  if(obs) lines.push({k:'Obs', v:obs});
+
+  document.getElementById('r-linhas').innerHTML = lines.length
+    ? lines.map(l => `<div class="r-linha"><span class="r-key">${l.k}</span><span class="r-val${l.verde?' r-desc':''}">${l.v}</span></div>`).join('')
+    : '<div class="r-linha"><span class="r-key">Nada selecionado ainda</span><span class="r-val">—</span></div>';
+
+  const ft = fmt(total);
+  document.getElementById('r-total').textContent = ft;
+  document.getElementById('fb-total').textContent = ft;
+}
+
+/* ══ SUPABASE ══ */
+async function inserirPedido(dados){
+  try{
+    const resp = await fetch(`${SB_URL}/rest/v1/pedidos`, {
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'apikey':SB_KEY,
+        'Authorization':'Bearer '+SB_KEY,
+        'Prefer':'return=minimal'
+      },
+      body: JSON.stringify(dados)
+    });
+    return resp.ok;
+  } catch(e){ return false; }
+}
+
+/* ══ VALIDAÇÃO + ENVIO ══ */
+function validarCampos(){
+  const erros = [];
+  if(!S.nome){
+    erros.push(1);
+    document.getElementById('err-nome').classList.add('show');
+    document.getElementById('inp-nome').classList.add('input-err');
+  }
+  if(carrinho.length === 0){
+    erros.push(2);
+    document.getElementById('err-cat').classList.add('show');
+  }
+  if(!S.entrega){
+    erros.push(8);
+    document.getElementById('err-entrega').classList.add('show');
+  }
+  if(erros.length > 0){
+    const primeiro = Math.min(...erros);
+    markError(primeiro); openCard(primeiro);
+    document.getElementById('card-'+primeiro).scrollIntoView({behavior:'smooth', block:'center'});
+    return false;
+  }
+  return true;
+}
+
+async function enviarZap(){
+  if(!validarCampos()){
+    document.getElementById('err-zap').textContent = '⚠️ Corrija os campos destacados.';
+    document.getElementById('err-zap').style.display = 'block';
+    return;
+  }
+  document.getElementById('err-zap').style.display = 'none';
+  salvarCache();
+
+  const total = calcTotal();
+  const rua  = document.getElementById('inp-rua')?.value?.trim()  || '';
+  const num  = document.getElementById('inp-num')?.value?.trim()  || '';
+
+  // salva no supabase (um registro por item)
+  for(let i = 0; i < carrinho.length; i++){
+    const it = carrinho[i];
+    await inserirPedido({
+      cliente_nome: S.nome,
+      entrega: S.entrega,
+      bairro: S.bairroNome,
+      endereco_rua: rua,
+      endereco_num: num,
+      endereco_bairro: document.getElementById('inp-bairro')?.value || '',
+      endereco_cidade: document.getElementById('inp-cidade')?.value || '',
+      endereco_comp: document.getElementById('inp-comp')?.value || '',
+      endereco_cep: document.getElementById('inp-cep')?.value || '',
+      produto: it.nome,
+      quantidade: it.qty,
+      unidade: it.unidade,
+      preco_unitario: it.preco,
+      total_item: it.total,
+      frete: i === 0 ? S.frete : 0,
+      desconto: i === 0 ? S.desconto : 0,
+      total_pedido: i === 0 ? total : it.total,
+      cupom_codigo: S.cupom?.codigo || null,
+      horario_desejado: S.horario,
+      agendado: S.agendado,
+      observacoes: document.getElementById('inp-obs')?.value || '',
+      item_index: i,
+      total_itens: carrinho.length
+    });
+  }
+
+  // Mensagem WhatsApp
+  let msg = `🛒 *PEDIDO - Faço Pedidos · Mercadinho*\n\n👤 *Cliente:* ${S.nome}\n\n`;
+  carrinho.forEach((it,i) => {
+    msg += `• ${it.nome} × ${it.qty} ${it.unidade} — ${fmt(it.total)}\n`;
+  });
+
+  msg += `\n`;
+  msg += S.entrega === 'retirada'
+    ? `🏪 *Entrega:* Retirada no mercado\n`
+    : `🛵 *Entrega:* Delivery — ${S.bairroNome||''}\n`;
+  if(S.entrega === 'delivery'){
+    if(rua) msg += `  📍 ${rua}${num ? ', '+num : ''}\n`;
+    const bairroEnd = document.getElementById('inp-bairro')?.value?.trim();
+    const cidade    = document.getElementById('inp-cidade')?.value?.trim();
+    if(bairroEnd) msg += `  🏘️ ${bairroEnd}${cidade ? ', '+cidade : ''}\n`;
+    const comp = document.getElementById('inp-comp')?.value?.trim();
+    if(comp) msg += `  🚪 Ref: ${comp}\n`;
+    msg += `  🚗 Taxa: ${fmt(S.frete)}\n`;
+  }
+  if(S.horario)  msg += `⏰ *Horário:* ${S.horario}\n`;
+  if(S.agendado) msg += `📅 *Agendado*\n`;
+  if(S.desconto > 0) msg += `🏷️ *Desconto:* − ${fmt(S.desconto)}\n`;
+  const obs = document.getElementById('inp-obs')?.value?.trim();
+  if(obs) msg += `📝 *Obs:* ${obs}\n`;
+  msg += `\n━━━━━━━━━━━━━━━━━━━\n💵 *TOTAL: ${fmt(total)}*`;
+  if(S.frete > 0) msg += `\n  (inclui ${fmt(S.frete)} de entrega)`;
+  msg += `\n\n_Pedido feito pelo site 🛒_`;
+
+  window.open('https://wa.me/'+ZAP_NUM+'?text='+encodeURIComponent(msg), '_blank');
+  mostrarObrigado();
+}
+
+/* ══ UTILS ══ */
+function mostrarToast(msg, dur=2200){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  clearTimeout(t._to);
+  t._to = setTimeout(() => t.style.display = 'none', dur);
+}
+function mostrarObrigado(){
+  const emojis = ['🛒','🥖','🍎','🧀','🌟'];
+  document.getElementById('obg-emoji').textContent = emojis[Math.floor(Math.random()*emojis.length)];
+  document.getElementById('obg-title').textContent = `Pedido enviado, ${S.nome}! 🎉`;
+  document.getElementById('obg-msg').textContent   = OBG_MSGS[Math.floor(Math.random()*OBG_MSGS.length)];
+  document.getElementById('tela-obrigado').style.display = 'flex';
+}
+function fecharObrigado(){
+  document.getElementById('tela-obrigado').style.display = 'none';
+  carrinho = [];
+  if(S.categoria) buildProdutos(S.categoria);
+  renderDrawer();
+  updateResumo();
+}
+
+/* ══ INIT ══ */
+document.addEventListener('DOMContentLoaded', () => {
+  buildProgress();
+  updateProgress(1);
+  checkHorario();
+  initCache();
+  updateResumo();
+  document.getElementById('inp-obs')?.addEventListener('input', updateResumo);
+  document.getElementById('inp-rua')?.addEventListener('input', updateResumo);
+  document.getElementById('inp-num')?.addEventListener('input', updateResumo);
+
+  let startY = 0;
+  const drawer = document.getElementById('cart-drawer');
+  drawer.addEventListener('touchstart', e => { startY = e.touches[0].clientY; }, {passive:true});
+  drawer.addEventListener('touchend',   e => { if(e.changedTouches[0].clientY - startY > 80) fecharDrawer(); }, {passive:true});
+});
+</script>
+</body>
+</html>
